@@ -1,7 +1,6 @@
 // C++ program for insertion sort
 //#include <stdc++.h>
 #include <iostream>
-#include <vector>
 using namespace std;
 
 // insertion sort
@@ -35,12 +34,13 @@ void print_array (int arr[], int number_of_elements)
     
 int main()
 {
+
     // Number of elements in array
     int number_of_elements;
     cin >> number_of_elements;
 
     // Elements in Array
-    int arr[number_of_elements];
+    int* arr = new int[number_of_elements];
     
     for (int index = 0; index < number_of_elements; index ++)
     cin >> arr[ index ];
@@ -48,5 +48,7 @@ int main()
     int* ans = insertion_sort (arr, number_of_elements);
     print_array (ans, number_of_elements);
     
+    delete[] arr;
+
     return 0;
 }

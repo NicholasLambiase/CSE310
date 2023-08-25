@@ -1,5 +1,4 @@
 // C++ program for insertion sort
-//#include <stdc++.h>
 #include <iostream>
 using namespace std;
 

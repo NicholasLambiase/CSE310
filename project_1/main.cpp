@@ -2,11 +2,11 @@
 using namespace std;
 
 
-long* bubbleSort(long array[]){
-    int placeholder;
-    for (int i = 0; i < sizeof(*array); i++)
+long long* bubbleSort(long long array[]){
+    long long placeholder;
+    for (long long unsigned i = 0; i < sizeof(*array); i++)
     {
-        for (int j = sizeof(*array); j > i; j--)
+        for (long long unsigned j = sizeof(*array); j > i; j--)
         {
             if (array[j] < array[j-1])
             {
@@ -19,7 +19,7 @@ long* bubbleSort(long array[]){
     return array;
 }
 
-void printArray(long array[], int arr_size){
+void printArray(long long array[], int arr_size){
     for (int i = 0; i < arr_size; i++)
     {
         cout << array[i] << " ";
@@ -34,15 +34,19 @@ int main(){
     cin >> arr_size;
 
     //instantiating an empty int array of size arr_size
-    long* elements = new long[arr_size];
+    long long* elements = new long long[arr_size];
 
     for (int i = 0; i < arr_size; i++)
     {
         cin >> elements[i];
     }
     
+    // //Debugging
+    // cout << endl;
+    // printArray(elements, arr_size);
+
     //Sort the elements of the int array using the bubblesort algorithm
-    long* ans = bubbleSort(elements);
+    long long* ans = bubbleSort(elements);
 
     printArray(ans, arr_size);
 

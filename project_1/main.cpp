@@ -1,7 +1,6 @@
 #include <iostream>
 using namespace std;
 
-
 long long* bubbleSort(long long array[], int arr_size){
     long long placeholder;
 
@@ -35,6 +34,7 @@ int main(){
     //instantiating long long array with a ptr to it
     long long* elements = new long long[arr_size];
 
+    //Reading in user input to long long array
     for (int i = 0; i < arr_size; i++)
     {
         cin >> elements[i];

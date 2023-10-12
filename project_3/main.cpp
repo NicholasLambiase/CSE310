@@ -3,52 +3,6 @@
 
 using namespace std;
 
-struct cmd
-{
-    int type = 0;
-    int data = 0;
-};
-
-cmd parseCommand(string cmd){
-    int type = 0;
-    int data = 0;
-
-    //make sure the command is all caps
-
-    if (cmd == "PRINT")
-    {
-        type = 3;
-    }
-    else
-    {
-        string commandType;
-        string commandData;
-        char* delimiter = " ";
-
-        int delimeterIndex = cmd.find(delimiter);
-        commandType = cmd.substr(0, delimeterIndex);
-        commandData = cmd.substr(delimeterIndex+1, cmd.length());
-
-        if (commandType == "INSERT")
-        {
-            type = 1;
-            data = stoi(commandData);
-        }
-        else if(commandType == "DELETE")
-        {
-            type = 2;
-        }
-
-    }
-
-    //make the cmd struct
-    struct cmd commandToReturn;
-    commandToReturn.type = type;
-    commandToReturn.data = data;
-
-    return commandToReturn;
-}
-
 int parent(int index){
     return (index-1)/2;
 }
@@ -117,47 +71,56 @@ int main(){
     int* maxHeap = new int[number_of_queries];
     int currentHeapSize = 0;
 
-    
+    int* printOutput = new int[number_of_queries];
+    int outputIndex = 0;
+
+    int currentQueries = 0;
     string command;
-    //to ignore the first return character we will increase the for loop count by 1
-    for (int i = 0; i < number_of_queries; i++)
+    int value;
+    while (currentQueries < number_of_queries)
     {
-        getline(cin, command);
+        cin >> command;
 
-        struct cmd processedCommand = parseCommand(command);
-
-        switch (processedCommand.type)
+        if (command == "INSERT")
         {
-        case 1:
-            //Insert
+            cin >> value;
             currentHeapSize++;
-            insertNode(maxHeap, processedCommand.data, currentHeapSize);
-            break;
-
-        case 2:
-            //Delete
-            deleteMax(maxHeap, currentHeapSize);
-            currentHeapSize--;
-            break;
-        
-        case 3:
-            //Print
-            if (currentHeapSize < 1)
-                cout << endl;
-            else
-                cout << maxHeap[0] << endl;
-            break;
-        default:
-            break;
+            insertNode(maxHeap, value, currentHeapSize);
         }
+        else if (command == "DELETE")
+        {
+            if (currentHeapSize > 0)
+            {
+                deleteMax(maxHeap, currentHeapSize);
+                currentHeapSize--;
+            } 
+        }
+        
+        else if (command == "PRINT")
+        {
+            if (currentHeapSize > 0)
+                printOutput[outputIndex] = maxHeap[0];
+            else
+                printOutput[outputIndex] = -1;
+            outputIndex++;    
+        }
+        currentQueries++;
 
-        //Debugging
-        // cout << "Tree: ";
+        // //Debugging Heap Operations
         // for (int i = 0; i < currentHeapSize; i++)
-        //     cout << maxHeap[i] << ", ";
-        // cout << endl;
+        //     cout << maxHeap[i] << ", "; 
+        // cout << endl << endl;
 
     }
 
+    for (int i = 0; i < outputIndex; i++)
+    {
+        if (printOutput[i] != -1)
+            cout << printOutput[i] << endl;
+        else
+            cout << endl;
+    }
+        
+        
     return 0;
 }

@@ -95,7 +95,6 @@ int main(){
                 currentHeapSize--;
             } 
         }
-        
         else if (command == "PRINT")
         {
             if (currentHeapSize > 0)

@@ -1,8 +1,13 @@
-MAIN :main.o
-	g++ -Wall -o MAIN main.o
+all :MAIN
 
-main.o 	:main.cpp
+MAIN :main.o bst.o
+	g++ -Wall -o MAIN main.o bst.o
+
+main.o 	:main.cpp bst.h
 	g++ -Wall -c main.cpp
 
+bst.o	:bst.cpp bst.h
+	g++ -Wall -c bst.cpp
+
 clean 	:
-	rm *.o PJ0
+	rm *.o MAIN

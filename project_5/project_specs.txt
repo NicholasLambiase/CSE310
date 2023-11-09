@@ -1,0 +1,3 @@
+Djakstra uses a minimum heap of each edge weight
+
+We will be given two networks

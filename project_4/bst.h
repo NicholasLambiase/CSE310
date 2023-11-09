@@ -1,9 +1,9 @@
 #ifndef BST_H
 #define BST_H
+#include <vector>
 
 using namespace std;
 
-//BST Structs
 struct Node
 {
     int val;
@@ -20,9 +20,9 @@ void bst_Transplant(Node* &root, Node* &u, Node* &v);
 Node* bst_Search(Node* x, int key);
 void bst_Insert(Node* &root, Node* &z);
 void bst_Delete(Node* &root, Node* &z);
-void bst_InOrder(Node* &x);
-void bst_PreOrder(Node* &x);
-void bst_PostOrder(Node* &x);
-void bst_LevelOrder(Node* &x);
+void bst_InOrder(Node* &x, vector<int> &inOrderResult);
+void bst_PreOrder(Node* &x, vector<int> &preOrderResult);
+void bst_PostOrder(Node* &x, vector<int> &postOrderResult);
+void bst_LevelOrder(Node* &x, vector<int> &levelOrderResult);
 
 #endif

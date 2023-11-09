@@ -1,10 +1,14 @@
-#include"bst.h"
-#include<iostream>
-#include<iterator>
-#include<string>
-#include<queue>
+#include <iostream>
+#include <string>
+#include <queue>
 
 using namespace std;
+
+struct Node
+{
+    int val;
+    struct Node *parent, *left, *right;
+};
 
 Node* createNode(int val){
     Node *temp = new Node;
@@ -20,16 +24,11 @@ Node* bst_Minimum(Node* root){
     return x;
 }
 
-Node* bst_Maximum(Node* root){
-    Node* x = root;
-    while (x->right != NULL)
-        x = x->right;
-    return x;
-}
-
 Node* bst_Search(Node* x, int key)
 {
-    if (x == nullptr || x->val == key)
+    if (x == NULL)
+        return x;
+    else if (x->val == key)
         return x;
     
     if (key < x->val)
@@ -41,7 +40,7 @@ Node* bst_Search(Node* x, int key)
 void bst_Insert(Node* &root, Node* &z)
 {
     Node* x = root;
-    Node* newParent = NULL;
+    Node* newParent = nullptr;
     
     while (x != nullptr)
     {
@@ -107,39 +106,39 @@ void bst_Delete(Node* &root, Node* &z)
     }
 }
 
-void bst_InOrder(Node* &x, vector<int> &inOrderResult)
+void bst_InOrder(Node* &x)
 {
-    if (x != nullptr)
+    if (x != NULL)
     {
-        bst_InOrder(x->left, inOrderResult);
-        inOrderResult.push_back(x->val);
-        bst_InOrder(x->right, inOrderResult);
+        bst_InOrder(x->left);
+        cout << x->val << " ";
+        bst_InOrder(x->right);
     }
 }
 
-void bst_PreOrder(Node* &x, vector<int> &preOrderResult)
+void bst_PreOrder(Node* &x)
 {
-    if (x != nullptr)
+    if (x != NULL)
     {
-        preOrderResult.push_back(x->val);
-        bst_PreOrder(x->left, preOrderResult);
-        bst_PreOrder(x->right, preOrderResult);
+        cout << x->val << " ";
+        bst_PreOrder(x->left);
+        bst_PreOrder(x->right);
     }
 }
 
-void bst_PostOrder(Node* &x, vector<int> &postOrderResult)
+void bst_PostOrder(Node* &x)
 {
-    if (x != nullptr)
+    if (x != NULL)
     {
-        bst_PostOrder(x->left, postOrderResult);
-        bst_PostOrder(x->right, postOrderResult);
-        postOrderResult.push_back(x->val);
+        bst_PostOrder(x->left);
+        bst_PostOrder(x->right);
+        cout << x->val << " ";
     }
 }
 
-void bst_LevelOrder(Node* &x, vector<int> &levelOrderResult)
+void bst_LevelOrder(Node* &x)
 {
-    if (x == nullptr)
+    if (x == NULL)
         return;
     
     queue<Node*> NodePtrQueue;
@@ -148,7 +147,7 @@ void bst_LevelOrder(Node* &x, vector<int> &levelOrderResult)
     while (NodePtrQueue.empty() == false)
     {
         Node* node = NodePtrQueue.front();
-        levelOrderResult.push_back(x->val);
+        cout << node->val << " ";
         NodePtrQueue.pop();
 
         if (node->left != nullptr)
@@ -156,4 +155,64 @@ void bst_LevelOrder(Node* &x, vector<int> &levelOrderResult)
         if (node->right != nullptr)
             NodePtrQueue.push(node->right);
     }
+}
+
+int main(){
+
+    long long int number_of_queries;
+    cin >> number_of_queries;
+
+    Node* root = NULL;
+
+    string command;
+    int value;
+    
+    for (long long int i = 0; i < number_of_queries; i++)
+    {
+        cin >> command;
+           
+        if(command == "INSERT")
+        {
+            cin >> value;
+            Node* newNode = createNode(value);
+            bst_Insert(root, newNode);
+        }
+        else if(command == "DELETE")
+        {
+            cin >> value;
+            Node* nodeToDelete = bst_Search(root, value);
+
+            if (nodeToDelete != NULL)
+                bst_Delete(root, nodeToDelete);
+        }
+        else if(command == "SEARCH")
+        {
+            cin >> value;
+            Node* result = bst_Search(root, value);
+            if (result == NULL)
+                cout << "False" << endl;
+            else
+                cout << "True" << endl;
+        }
+        else if(command == "INORDER")
+        {
+            bst_InOrder(root);
+            cout << endl;
+        }
+        else if(command == "PREORDER")
+        {
+            bst_PreOrder(root);
+            cout << endl;
+        }
+        else if(command == "POSTORDER")
+        {
+            bst_PostOrder(root);
+            cout << endl;
+        }
+        else if(command == "LEVELORDER"){
+            bst_LevelOrder(root);
+            cout << endl;
+        }
+    }
+    return 0;
 }

@@ -63,7 +63,7 @@ void Graph::printAdjacencyLists(){
 
         int j;
         while(adjacencyLists[startNode][j].destination != 0){
-            j++
+            j++;
         }
         adjacencyLists[startNode][j] = *edge;
 

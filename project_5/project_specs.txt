@@ -1,3 +1,32 @@
 Djakstra uses a minimum heap of each edge weight
 
 We will be given two networks
+
+Step One 
+- read in all Edges and create an adjacency List
+
+Step Two
+- Once we are given a source push all edges to Min heap
+
+Step 3
+- Extract the Minimum Edge of the current Heap
+    If it is the Destination Node
+        Exit code and return the current state
+    else
+
+
+
+When Storing the State...
+Distance Array - initialized to infinity updated as you pull edges from min heap
+
+
+Once the State has been computed...
+
+How to compute if no path exists to node being queried:
+    There will be no nodes left in the Minimum Heap as it is not a possible edge from the given source
+    All nodes from the min heap
+
+How to compute if a path could exist:
+    empty the Min heap until you encounter an edge that has a node we have not visited
+
+We keep a list of all the edges we have visited

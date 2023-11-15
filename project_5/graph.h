@@ -15,6 +15,8 @@ class Graph{
         ~Graph();
 
         bool loadGraph(const string& filename, const string& direction);
+        void runDjikstra(int source, int destination, int flag);
+        void writePath(int source, int destination);
         void printAdjacencyLists();
     
     private:

@@ -24,7 +24,7 @@ bool Graph::loadGraph(const string& filename, const string& direction)
     if(getline(file, line))
     {
         int n, m;
-        ifstringstream iss(line);
+        stringstream iss(line);
         if(iss >> n >> m)
         {
             numVerticies = n + 1;
@@ -46,7 +46,7 @@ void Graph::printAdjacencyLists(){
     int edgeId, startNode, endNode;
     double weight;
     string line;
-    isstringstream iss(line);
+    stringstream iss(line);
     if(iss << edgeId << startNode << endNode << weight){
         startNode++;
         endNode++;
@@ -67,7 +67,7 @@ void Graph::printAdjacencyLists(){
         }
         adjacencyLists[startNode][j] = *edge;
 
-        if (direction == 'undirected'){
+        if (isDirected == 'undirected'){
             Edge* reverseEdge = new Edge;
             edge->destination = startNode;
             edge->weight = weight;

@@ -24,7 +24,7 @@ bool Graph::loadGraph(const string& filename, const string& direction)
     if(getline(file, line))
     {
         int n, m;
-        stringstream iss(line);
+        istringstream iss(line);
         if(iss >> n >> m)
         {
             numVerticies = n + 1;
@@ -46,13 +46,13 @@ void Graph::printAdjacencyLists(){
     int edgeId, startNode, endNode;
     double weight;
     string line;
-    stringstream iss(line);
-    if(iss << edgeId << startNode << endNode << weight){
+    istringstream iss(line);
+    if(iss >> edgeId >> startNode >> endNode >> weight){
         startNode++;
         endNode++;
         //perform checks to see if the edge is valid... do the nodes exist 1-n
 
-        Edge* edge = new Edge;
+        Edge* edge = new Edge; 
         edge->destination = endNode;
         edge->weight = weight;
 

@@ -30,3 +30,39 @@ How to compute if a path could exist:
     empty the Min heap until you encounter an edge that has a node we have not visited
 
 We keep a list of all the edges we have visited
+
+To free memory use the "free" commmand for all global variables and adjacency list
+
+
+When traversing the Adjacency list leave an empty edge at the end of each list so that we can use a while loop
+The while loop would terminate when the edge being observed has a destination value of 0;
+empty end position is to avoid segmentation faults.
+
+
+MinHeap Stuff:
+we are pushing edges to our Minheap
+
+MinHeap size declaration = number of Verticies
+
+1. Load Graph - Print Graph
+2. Define Min Heap
+3. Djakstra
+
+
+How to have the main take a file input and direction input
+Work with Main argv array - look up on Geeks for Geeks
+
+Djakstra:
+push the start node then enter the while loop
+while Djakstra is running maintain an array of all the extracted nodes from MinHeap (this will keep track of all nodes that are apart of our Djakstra path)
+While Djakstra is running also maintain a distance array from start to destination
+
+Djakstra Querey Cases:
+1. if the node being queried was extracted we know the distance
+2. if the node is not part of extraced list but is in min heap still - path exists but is not computed 
+
+if there is a posibility to still explore the graph after Dijkstra exits 
+3. The path has not been computed yet
+
+else
+4. The path does not exist 

@@ -67,7 +67,7 @@ void Graph::printAdjacencyLists(){
         }
         adjacencyLists[startNode][j] = *edge;
 
-        if (isDirected == 'undirected'){
+        if (!isDirected){
             Edge* reverseEdge = new Edge;
             edge->destination = startNode;
             edge->weight = weight;

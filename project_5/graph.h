@@ -9,6 +9,11 @@
 
 using namespace std;
 
+struct Edge {
+            int destination;
+            double weight;
+        };
+
 class Graph{
     public:
         Graph();
@@ -18,12 +23,10 @@ class Graph{
         void runDjikstra(int source, int destination, int flag);
         void writePath(int source, int destination);
         void printAdjacencyLists();
-    
+
     private:
-        struct Edge {
-            int destination;
-            double weight;
-        };
+
+        //Struct def of edge was here
 
         int numVerticies;
         int numEdges;

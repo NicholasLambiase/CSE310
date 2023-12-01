@@ -2,41 +2,127 @@
 
 using namespace std;
 
-MinHeap::MinHeap(int numEdges){
-    minHeap = new Edge[numEdges];
-    heapSize = numEdges;
-    currentHeapSize = 0;
-};
-         
+//Constructor and Destructor
+
+MinHeap::MinHeap(){
+    minHeap = nullptr;
+    capacity = 0;
+    size = 0;
+}
+
 MinHeap::~MinHeap(){
-    if (minHeap)
-        free(minHeap);
-};
-
-int MinHeap::Parent(int i){
-    return (i - 1)/2;
+    delete(minHeap);
 }
 
-int MinHeap::LeftChild(int i){
-    return (2*i)+1;
-}
+//Public Member Function Definitions
 
-int MinHeap::RightChild(int i){
-    return (2*1);
-}
+void MinHeap::init(int desiredSize){
+    capacity = desiredSize;
+    minHeap = new Edge[capacity];
+}  
 
-void MinHeap::InsertEdgeNode(Edge edge_to_insert){
-    int i = heapSize - 1;
-    minHeap[i] = edge_to_insert;
-    while(i > 0 && minHeap[Parent(i)].weight > minHeap[i].weight)
+void MinHeap::push(Edge pushEdge){
+    if (size + 1 <= capacity)
     {
-        Edge tempEdge = minHeap[i];
-        minHeap[i] = minHeap[Parent(i)];
-        minHeap[Parent(i)] = tempEdge;
-        i = Parent(i);
+        minHeap[size] = pushEdge;
+        size++;
+
+        int pushEdgeIndex = size-1;
+        heapifyUp(pushEdgeIndex);
     }
 }
 
+Edge MinHeap::pop(){
+    if (size != 0)
+    {
+        // //Debug
+        // cout << "size is greater than 0" << endl;
+        // cout << "The current root is: (" << minHeap->destination << ", " << minHeap->weight << ")" << endl;
+        
+        int root = 0;
+        Edge poppedEdge = minHeap[root];
+        
+        //replace root with last edge in array and decrease size
+        minHeap[root] = minHeap[size-1];
+        size--;
+        
+        if (size > 1)
+            heapifyDown(root);
+        
+        return poppedEdge;
+    }
+    else {
+        Edge nullEdge;
+        nullEdge.destination = 0;
+        nullEdge.weight = 0;
+        return nullEdge;
+    }
+}
 
+bool MinHeap::empty() const{
+    return size == 0;
+}
 
-Edge* ExtractMinEdge();
+//Private Member Funtion Definitions
+
+void MinHeap::heapifyUp(int index){
+    int indexParent = heapParent(index);
+    while (index > 0 && minHeap[indexParent].weight > minHeap[index].weight)
+    {
+        swap(index, indexParent);
+        index = indexParent;
+    }
+}
+
+void MinHeap::heapifyDown(int index){
+    int smallestEdgeIndex;
+    int leftEdgeIndex = heapLeftChild(index);
+    int rightEdgeIndex = heapRightChild(index);
+
+    if (leftEdgeIndex < size && minHeap[leftEdgeIndex].weight < minHeap[index].weight)
+        smallestEdgeIndex = leftEdgeIndex;
+    else
+        smallestEdgeIndex = index;
+
+    if (rightEdgeIndex > size && minHeap[rightEdgeIndex].weight < minHeap[index].weight)
+        smallestEdgeIndex = rightEdgeIndex;
+
+    if (smallestEdgeIndex != index)
+    {
+        swap(smallestEdgeIndex, index);
+        heapifyDown(smallestEdgeIndex);
+    }
+}
+
+void MinHeap::swap(int i, int j){
+    Edge tempEdge = minHeap[i];
+    minHeap[i] = minHeap[j];
+    minHeap[j] = tempEdge;
+}
+
+//Heap Family Calculations
+int MinHeap::heapParent(int index){
+    return (index-1)/2;
+}
+
+int MinHeap::heapLeftChild(int index){
+    return (2*index)+1;
+}
+
+int MinHeap::heapRightChild(int index){
+    return (2*index)+2;
+}
+
+//MinHeap Printing methods
+
+void MinHeap::printMinHeap(){
+    for (int i = 0; i < size; i++){
+        printEdge(minHeap[i]);
+        cout << " ";
+    }
+    cout << endl;
+}
+
+void MinHeap::printEdge(Edge printEdge){
+    cout << "(" << printEdge.destination << ", " << printEdge.weight << ")";
+}

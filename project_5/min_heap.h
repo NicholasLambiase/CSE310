@@ -1,26 +1,39 @@
-#include <string>
-#include "graph.h"
+#ifndef MINHEAP_H
+#define MINHEAP_H
 
-using namespace std;
+#include <iostream>
 
-class MinHeap{
-    public:
-        MinHeap(int numEdges);
-        ~MinHeap();
+struct Edge {
+        int destination;
+        double weight;
+    };
 
-        void InsertEdgeNode(Edge edge_to_insert);
-        Edge* ExtractMinEdge();
+class MinHeap {
+public:
+    MinHeap();
+    ~MinHeap();
+    void init(int desiredSize);  // Initialize the min-heap with a given size
+    void push(Edge pushEdge);
+    Edge pop();
+    bool empty() const;
 
-    private:
+    //MinHeap Printing methods
+    void printMinHeap();
+    void printEdge(Edge printEdge);
 
-        //this will point to an array of type Edge
-        Edge* minHeap;
-        int heapSize;
-        int currentHeapSize;
-        
-        void MinHeapify();
-        int Parent(int i);
-        int LeftChild(int i);
-        int RightChild(int i);
+private:
+    Edge* minHeap;// Array to store edges of Min Heap
+    int capacity; // Maximum size of the heap
+    int size;     // Current number of elements in the heap
 
+    void heapifyUp(int index);
+    void heapifyDown(int index);
+    void swap(int i, int j);
+
+    //Heap Family Calculations
+    int heapParent(int index);
+    int heapLeftChild(int index);
+    int heapRightChild(int index);
 };
+
+#endif

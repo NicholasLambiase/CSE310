@@ -66,3 +66,12 @@ if there is a posibility to still explore the graph after Dijkstra exits
 
 else
 4. The path does not exist 
+
+
+
+Goals for tomorrow
+run skeleton Djakstra
+push source 
+traverse adjacency list
+push to back of min heap
+also minheap print function to check state of min heap

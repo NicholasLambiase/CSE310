@@ -16,7 +16,7 @@ public:
     ~Graph();
 
     bool loadGraph(const std::string& filename, const std::string& direction);
-    void runDijkstra(int source, int destination, int flag);
+    void runDijkstra(int newSource, int destination, int flag);
     void writePath(int source, int destination);
     void printAdjacencyLists();
 
@@ -35,8 +35,6 @@ private:
     int* predecessor;           // Dynamic array for predecessors
     double* distance;           // Dynamic array for distances
     int* listSizes;             // Dynamic array for vertex edges frequency
-
-    MinHeap* minHeap;
 };
 
 #endif

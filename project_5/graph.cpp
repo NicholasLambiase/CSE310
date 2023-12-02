@@ -3,18 +3,33 @@
 using namespace std;
 
 Graph::Graph(){
-    adjacencyLists = nullptr;
     numVertices = 0;
     numEdges = 0;
+    isDirected = false;
     source = 0;
-    isDirected = 0;
+    graphTraversed = false;
+    fullTraversal = false;
+
+    adjacencyLists = nullptr;
+    extractedVertices = nullptr;
+    relaxedVertices = nullptr;
+    predecessor = nullptr;
+    distance = nullptr;
+    listSizes = nullptr;
 }
 
 Graph::~Graph(){
     if(adjacencyLists){
         for(int i = 0; i < numVertices; i++)
-            free(adjacencyLists[i]);
+            delete adjacencyLists[i];
     }
+    
+    delete[] adjacencyLists;
+    delete[] extractedVertices;
+    delete[] relaxedVertices;
+    delete[] predecessor;
+    delete[] distance;
+    delete[] listSizes;
 }
 
 bool Graph::loadGraph(const string& filename, const string& direction)
@@ -161,12 +176,199 @@ bool Graph::loadGraph(const string& filename, const string& direction)
     return true;
 }
     
-void Graph::runDijkstra(int source, int destination, int flag){
+void Graph::runDijkstra(int newSource, int destination, int flag){
+    //initialize variables and data structure
+    int heapCapacity = numVertices;
+    source = newSource;
+    graphTraversed = true;
+    fullTraversal = true;
+
+    //Initialize all Dijkstra Arrays and data
+    const double DOUBLE_MAX = 9999999999.0;
+    bool* extracted = new bool[numVertices];
+    for (int i = 0; i < numVertices; i++)
+    {
+        extracted[i] = false;
+        extractedVertices[i] = -1;
+        relaxedVertices[i] = -1;
+        predecessor[i] = -1;
+        distance[i] = DOUBLE_MAX;
+    }
+
+    //Mark the source node as extracted
+    extracted[source] = true;
     
+    //initialize MinHeap
+    MinHeap minHeap;
+    minHeap.init(heapCapacity);
+    distance[source] = 0;
+    
+    Edge* sourceEdge = new Edge;
+    sourceEdge->destination = newSource;
+    sourceEdge->weight = 0;
+
+    minHeap.push(*sourceEdge);
+
+    //If flag is set, print initial insertion
+    if (flag == 1)
+        printf("Insert vertex %d, key=%12.4f\n", sourceEdge->destination, sourceEdge->weight);
+
+    //Main Dijkstra Loop
+    while (!minHeap.empty())
+    {
+        Edge extractedEdge = minHeap.pop();
+        int currVert = extractedEdge.destination;
+        double currWeight = distance[extractedEdge.destination];
+
+        //Mark the vertex as extracted - officially visited
+        extracted[currVert] = true;
+        //Copy the current shortest distance from source to extracted vertex to extractedVerticies array
+        extractedVertices[currVert] = distance[currVert];
+
+        //if flag is set print deletion of vertex
+        if (flag == 1)
+            printf("Delete vertex %d, key=%12.4f\n", currVert, currWeight);
+
+        //if the destination is reached exit the loop
+        if (currVert == destination) {
+            // //debug
+            // cout << "Destination found!" << endl;
+            break;
+        }
+        
+        //Loop through adjacency list of current vertex
+        if (adjacencyLists[currVert])
+        {
+            int j = 0;
+            while (adjacencyLists[currVert][j].destination != 0)
+            {   
+                //Extract neightbor vertecies information
+                int currAdjDestination = adjacencyLists[currVert][j].destination;
+                double currAdjWeight = adjacencyLists[currVert][j].weight;
+
+                //if neighbor is not extracted and relaxation is possible
+                if (!extracted[currAdjDestination] && ((distance[currVert] + currAdjWeight) < distance[currAdjDestination]))
+                {
+                    //perform relaxation
+                    double oldDistance = distance[currAdjDestination];
+                    distance[currAdjDestination] = distance[currVert] + currAdjWeight;
+                    predecessor[currAdjDestination] = currVert;
+                    relaxedVertices[currAdjDestination] = distance[currAdjDestination];
+
+                    //if flag is set
+                    if (oldDistance != DOUBLE_MAX && flag == 1)
+                        printf("Decrease key of vertex %d, from %12.4f to %12.4f\n", currAdjDestination, oldDistance, distance[currAdjDestination]);
+
+                    //push neighbor into minHeap
+                    Edge* pushEdge = new Edge;
+                    pushEdge->destination = currAdjDestination;
+                    pushEdge->weight = distance[currAdjDestination];
+                    minHeap.push(*pushEdge);
+
+                    if (flag == 1)
+                        printf("Insert vertex %d, key=%12.4f\n", currAdjDestination, distance[currAdjDestination]);
+                }
+                j++;
+            }
+            
+        }
+
+        // //debugging
+        // minHeap.printMinHeap();
+        // cout << endl;
+
+    }
+
+    while (!minHeap.empty())
+    {
+        Edge leftOverEdge = minHeap.pop();
+        if (!extracted[leftOverEdge.destination])
+            fullTraversal = false;
+    }
+    
+    delete[] extracted;
+
 }
 
-void writePath(int source, int destination){
+void Graph::writePath(int s, int d){
 
+    //check to see if the computation has even occured yet
+    if (!graphTraversed) {
+        cout << "Error: no path computation done" << endl;
+        return;
+    }
+    
+    //Check to see if the write path is a valid source destination pair
+    if (s != source || d < 1 || d >= numVertices) {
+        cout << "Error: invalid source destination pair" << endl;
+        return;
+    }
+    
+    if (extractedVertices[d] != -1)
+    {
+        //Create new array to store the path
+        int* path = new int[numVertices];
+        int current = d;
+        int pathsize = 0;
+
+        //Reconstruct the path
+        while (current != s)
+        {
+            path[pathsize] = current;
+            current = predecessor[current];
+            pathsize++;
+        }
+
+        path[pathsize] = s;
+
+        //Print the shortest path
+        cout << "Shortest path: ";
+        for (int i = pathsize; i >= 0; i--)
+            cout << path[i] << " ";
+        cout << endl;
+
+        //Print path weight
+        printf("The path weight is: %12.4f\n", distance[d]);
+
+        delete[] path;
+        
+    }
+    else if (relaxedVertices[d] != -1)
+    {
+        //Create new array to store the path
+        int* path = new int[numVertices];
+        int current = d;
+        int pathsize = 0;
+
+        //Reconstruct the path
+        while (current != s)
+        {
+            path[pathsize] = current;
+            current = predecessor[current];
+            pathsize++;
+        }
+
+        path[pathsize] = s;
+
+        //Print the shortest path
+        cout << "Path not known to be shortest: ";
+        for (int i = pathsize; i >= 0; i--)
+            cout << path[i] << " ";
+        cout << endl;
+
+        //Print path weight
+        printf("The path weight is: %12.4f\n", distance[d]);
+
+        delete[] path;
+        
+    }
+    // there is still a node left in the network
+    else if (fullTraversal == false)
+        cout << "No " << s << "-" << d << " path has been computed, yet." << endl;
+    // traversed as far as possible. did not see the d in extracted or relaxed
+    else
+        cout << "No " << s << "-" << d << " path exists." << endl;
+    
 }
 
 void Graph::printAdjacencyLists(){

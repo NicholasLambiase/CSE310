@@ -11,19 +11,19 @@ MinHeap::MinHeap(){
 }
 
 MinHeap::~MinHeap(){
-    delete(minHeap);
+    delete[] minHeap;
 }
 
 //Public Member Function Definitions
 
-void MinHeap::init(int desiredSize){
-    capacity = desiredSize;
+void MinHeap::init(int capacity){
     minHeap = new Edge[capacity];
+    this->capacity = capacity;
 }  
 
 void MinHeap::push(Edge pushEdge){
     if (size + 1 <= capacity)
-    {
+    {   
         minHeap[size] = pushEdge;
         size++;
 
@@ -71,6 +71,7 @@ void MinHeap::heapifyUp(int index){
     {
         swap(index, indexParent);
         index = indexParent;
+        indexParent = heapParent(index);
     }
 }
 
@@ -84,7 +85,7 @@ void MinHeap::heapifyDown(int index){
     else
         smallestEdgeIndex = index;
 
-    if (rightEdgeIndex > size && minHeap[rightEdgeIndex].weight < minHeap[index].weight)
+    if (rightEdgeIndex < size && minHeap[rightEdgeIndex].weight < minHeap[smallestEdgeIndex].weight)
         smallestEdgeIndex = rightEdgeIndex;
 
     if (smallestEdgeIndex != index)

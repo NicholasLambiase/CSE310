@@ -151,7 +151,6 @@ bool Graph::loadGraph(const string& filename, const string& direction) {
 }
 
 void Graph::runDijkstra(int newSource, int destination, int flag) {
-    /*
     // Initialize variables and data structures
     n = numVertices
     source = newSource
@@ -234,11 +233,10 @@ void Graph::runDijkstra(int newSource, int destination, int flag) {
     // Deallocate memory for extracted array
     delete[] extracted
 
-    */
 }
 
 void Graph::writePath(int s, int d) {
-    /*
+    
     // Check if the graph has been traversed
     if graphTraversed is false
         print "Error: no path computation done"
@@ -310,11 +308,11 @@ void Graph::writePath(int s, int d) {
     // Case 4: Entire graph has been traversed, and d is not in extracted or relaxed
     else
         print "No ", s, "-", d, " path exists."
-    */
+    
 }
 
 void Graph::printAdjacencyLists() {
-    /*
+    
     // Loop through each vertex in the graph
     for v from 0 to numVertices - 1
         print "Adjacency list for vertex " + v + ": "
@@ -337,5 +335,5 @@ void Graph::printAdjacencyLists() {
         // Move to the next line for the next vertex
         print newline
 
-    */
+    
 }

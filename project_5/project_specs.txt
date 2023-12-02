@@ -75,3 +75,7 @@ push source
 traverse adjacency list
 push to back of min heap
 also minheap print function to check state of min heap
+
+
+Dijkstra Stuff
+Extracted array contains all nodes extracted from min heap - visited

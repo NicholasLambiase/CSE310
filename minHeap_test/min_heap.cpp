@@ -71,6 +71,7 @@ void MinHeap::heapifyUp(int index){
     {
         swap(index, indexParent);
         index = indexParent;
+        indexParent = heapParent(index);
     }
 }
 
@@ -84,7 +85,7 @@ void MinHeap::heapifyDown(int index){
     else
         smallestEdgeIndex = index;
 
-    if (rightEdgeIndex > size && minHeap[rightEdgeIndex].weight < minHeap[index].weight)
+    if (rightEdgeIndex < size && minHeap[rightEdgeIndex].weight < minHeap[smallestEdgeIndex].weight)
         smallestEdgeIndex = rightEdgeIndex;
 
     if (smallestEdgeIndex != index)

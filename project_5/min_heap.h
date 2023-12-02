@@ -12,7 +12,7 @@ class MinHeap {
 public:
     MinHeap();
     ~MinHeap();
-    void init(int desiredSize);  // Initialize the min-heap with a given size
+    void init(int capacity);  // Initialize the min-heap with a given size
     void push(Edge pushEdge);
     Edge pop();
     bool empty() const;
